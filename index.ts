@@ -1,8 +1,10 @@
 import express, {Request, Response} from "express";
 import sequelize from "./src/database"
+import routes from "./src/routes"
 const app = express();
 const port = process.env.PORT ?? 3000;
 app.use(express.json());
+app.use("/api", routes)
 app.get("/", async (req: Request, res: Response) => {
     res.send("Hello, project dashboard initialized");
 })
