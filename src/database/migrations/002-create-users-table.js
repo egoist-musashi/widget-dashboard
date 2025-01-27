@@ -9,10 +9,6 @@ module.exports = {
                     autoIncrement: true,
                     allowNull: false,
                 },
-                name: {
-                    type: Sequelize.STRING,
-                    allowNull: false,
-                },
                 mobile_number: {
                     type: Sequelize.STRING,
                     allowNull: false,

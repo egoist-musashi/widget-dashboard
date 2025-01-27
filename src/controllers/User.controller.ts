@@ -4,10 +4,9 @@ import { hashPassword } from "../helperUtils/Password";
 
 export const createUser = async (req: Request, res: Response) => {
     try {
-        const { name, mobile_number, password } = req.body;
+        const {mobile_number, password } = req.body;
         const hashedPassword = await hashPassword(password);
         const user = await User.create({
-            name,
             mobile_number,
             password: hashedPassword,
         });
@@ -49,13 +48,12 @@ export const getAllUsers = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const { name, mobile_number, password } = req.body;
+        const { mobile_number, password } = req.body;
         const user = await User.findByPk(id);
 
         if (user) {
             const hashedPassword = password ? await hashPassword(password) : user.password;
             await user.update({
-                name,
                 mobile_number,
                 password: hashedPassword,
             });

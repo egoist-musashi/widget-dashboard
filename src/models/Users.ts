@@ -3,7 +3,6 @@ import sequelize from "../database";
 
 interface UserAttributes {
     id: number;
-    name: string;
     mobile_number: string;
     password: string;
     createdAt?: Date;
@@ -15,7 +14,6 @@ type UserCreationAttributes = Optional<UserAttributes, 'id' | 'createdAt' | 'upd
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
     public id!: number;
-    public name!: string;
     public mobile_number!: string;
     public password!: string;
     public readonly createdAt!: Date;
@@ -29,10 +27,6 @@ User.init(
             type: DataTypes.BIGINT,
             primaryKey: true,
             autoIncrement: true,
-        },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
         },
         mobile_number: {
             type: DataTypes.STRING,
