@@ -10,6 +10,8 @@ import PensionRoute from "./Pension.route";
 import DeepamRoute from "./Deepam.route";
 import EndowmentRoute from "./Endowment.route";
 import FertilizersRoute from "./Fertilizers.route";
+import HealthRoute from "./Health.route";
+import SandRoute from "./Sand.route";
 const router = Router();
 
 
@@ -23,6 +25,8 @@ router.use("/pension", PensionRoute);
 router.use("/deepam", DeepamRoute);
 router.use("/endowment", EndowmentRoute);
 router.use("/fertilizers", FertilizersRoute);
+router.use("/health", HealthRoute);
+router.use("/sand", SandRoute);
 router.use("/counts", CountRoute);
 
 export default router;

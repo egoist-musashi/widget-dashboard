@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import {Sequelize} from "sequelize";
 import AnnaCanteen from "../models/AnnaCanteen";
 import Pension from "../models/Pension";
 import APSRTC from "../models/APSRTC";
@@ -13,11 +14,10 @@ interface Params {
     tableName: string;
 }
 
-export const getCounts = async (req: Request<Params>, res: Response) : Promise<void> => {
+export const getCounts = async (req: Request<Params>, res: Response): Promise<void> => {
     try {
         const { tableName } = req.params;
 
-        // Define a mapping between table names and models
         const validTables = {
             anna_canteen: AnnaCanteen,
             pension: Pension,
@@ -29,20 +29,25 @@ export const getCounts = async (req: Request<Params>, res: Response) : Promise<v
             deepam: Deepam,
         };
 
-        // Validate the table name
         const Model = validTables[tableName as keyof typeof validTables];
         if (!Model) {
-           res.status(400).json({ message: "Invalid table name" });
-           return
+            res.status(400).json({ message: "Invalid table name" });
+            return;
         }
 
         const [totalRecords, totalUniqueMobileNumbers] = await Promise.all([
-            Model.count(), // Total number of records
-            Model.count({ distinct: true, col: "mobile_number" }), // Count unique mobile numbers
+            Model.count(),
+            Model.count({ distinct: true, col: "mobile_number" }),
         ]);
 
-        // Calculate repeated customers
-        const repeatedCustomers = totalRecords - totalUniqueMobileNumbers;
+        // Use findAll with group and having to count repeated mobile numbers
+        const repeatedMobileNumbers = await Model.findAll({
+            attributes: ["mobile_number"],
+            group: ["mobile_number"],
+            having: Sequelize.literal("COUNT(mobile_number) > 1"),
+        });
+
+        const repeatedCustomers = repeatedMobileNumbers.length;
 
         res.status(200).json({
             totalUniqueMobileNumbers,
@@ -53,3 +58,5 @@ export const getCounts = async (req: Request<Params>, res: Response) : Promise<v
         res.status(500).json({ message: "Error fetching counts" });
     }
 };
+
+
