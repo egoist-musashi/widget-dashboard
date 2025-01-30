@@ -1,5 +1,5 @@
 import express from "express";
-import * as DeepamController from "../controllers/DeepamController";
+import * as DeepamController from "../controllers/Deepam.controller";
 
 const router = express.Router();
 
